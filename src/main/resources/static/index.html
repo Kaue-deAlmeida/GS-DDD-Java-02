@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OndaCare — Painel Operacional e API</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary: #f97316;
+            --primary-hover: #ea580c;
+            --ok: #22c55e;
+            --danger: #ef4444;
+        }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { margin: 0; background: var(--bg); color: var(--text); padding: 24px; }
+        .container { max-width: 1120px; margin: 0 auto; }
+        header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+        h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
+        .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
+        .badge { background: rgba(34,197,94,0.15); color: var(--ok); border: 1px solid rgba(34,197,94,0.4); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 18px; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+        .card h2 { margin: 0 0 12px; font-size: 1.05rem; color: #fdba74; }
+        label { display: block; font-size: 0.8rem; color: var(--muted); margin: 8px 0 4px; }
+        input, select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); font-size: 0.9rem; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        button { margin-top: 12px; padding: 9px 14px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.88rem; }
+        button:hover { background: var(--primary-hover); }
+        button.secondary { background: #334155; }
+        button.secondary:hover { background: #475569; }
+        .console { margin-top: 22px; background: #020617; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+        .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 0.84rem; color: #e2e8f0; max-height: 320px; overflow-y: auto; }
+        .status-ok { color: var(--ok); font-weight: 700; }
+        .status-err { color: var(--danger); font-weight: 700; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div>
+            <h1>OndaCare — Monitoramento Preventivo em Ondas de Calor</h1>
+            <div class="subtitle">Equipe CitizenTech · FIAP Global Solution 2026.2 · API RESTful Java + Spring Boot + Oracle</div>
+        </div>
+        <div class="badge" id="apiStatus">API Online</div>
+    </header>
+
+    <div class="grid">
+        <!-- Card 1: Cadastrar e Listar Idosos -->
+        <div class="card">
+            <h2>1. Cadastro e Consulta de Idosos</h2>
+            <label>Nome do Idoso</label>
+            <input id="nomeIdoso" value="Aparecida Lopes" />
+            <div class="row">
+                <div>
+                    <label>Telefone</label>
+                    <input id="telIdoso" value="(11) 98472-3105" />
+                </div>
+                <div>
+                    <label>ID UBS Referência</label>
+                    <input id="ubsIdoso" type="number" value="1" />
+                </div>
+            </div>
+            <label>Endereço (Rua e Número)</label>
+            <input id="ruaIdoso" value="Rua das Palmeiras, 248" />
+            <div class="row">
+                <div>
+                    <label>Cidade</label>
+                    <input id="cidadeIdoso" value="Barueri" />
+                </div>
+                <div>
+                    <label>Bairro</label>
+                    <input id="bairroIdoso" value="Jardim Silveira" />
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label>Check-in Manhã</label>
+                    <input id="manhaIdoso" value="08:00" />
+                </div>
+                <div>
+                    <label>Check-in Tarde</label>
+                    <input id="tardeIdoso" value="16:30" />
+                </div>
+            </div>
+            <div class="row">
+                <div>
+                    <label>Consentimento LGPD</label>
+                    <select id="consentIdoso">
+                        <option value="true" selected>Sim (true)</option>
+                        <option value="false">Não (false)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Sem Família</label>
+                    <select id="semFamIdoso">
+                        <option value="false" selected>Não</option>
+                        <option value="true">Sim</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="cadastrarIdoso()">POST /api/idosos</button>
+            <button class="secondary" onclick="req('GET', '/api/idosos')">GET /api/idosos</button>
+        </div>
+
+        <!-- Card 2: Alertas de Calor & Ponto Fresco -->
+        <div class="card">
+            <h2>2. Alertas de Calor e Ponto Fresco</h2>
+            <label>Cidade do Alerta</label>
+            <input id="cidadeAlerta" value="Barueri" />
+            <label>Data do Alerta</label>
+            <input id="dataAlerta" type="date" value="2026-11-20" />
+            <label>Orientações Preventivas</label>
+            <input id="orientAlerta" value="Beba água; Deixe a casa ventilada; Evite sair nas horas mais quentes." />
+            <button onclick="criarAlerta()">POST /api/alertas-calor</button>
+            <button class="secondary" onclick="req('GET', '/api/alertas-calor?cidade=' + encodeURIComponent(val('cidadeAlerta')))">GET Alertas</button>
+
+            <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;" />
+            <label>ID do Idoso para Consultar Ponto Fresco</label>
+            <input id="idIdosoPonto" type="number" value="1" />
+            <button class="secondary" onclick="req('GET', '/api/idosos/' + val('idIdosoPonto') + '/ponto-fresco')">GET Ponto Fresco</button>
+        </div>
+
+        <!-- Card 3: Check-in, Escalação e Fila UBS -->
+        <div class="card">
+            <h2>3. Check-in, Escalação e UBS</h2>
+            <label>ID do Idoso (Agendar Check-in)</label>
+            <input id="idIdosoCheckin" type="number" value="1" />
+            <button onclick="agendarCheckin()">POST /api/checkins</button>
+            <button class="secondary" onclick="req('GET', '/api/idosos/' + val('idIdosoCheckin') + '/checkins/hoje')">GET Check-ins</button>
+
+            <div class="row" style="margin-top:8px;">
+                <div>
+                    <label>ID Check-in</label>
+                    <input id="idCheckinResp" type="number" value="1" />
+                </div>
+                <div>
+                    <label>Resposta</label>
+                    <select id="respCheckin">
+                        <option value="TO_BEM">TO_BEM</option>
+                        <option value="PRECISO_DE_AJUDA">PRECISO_DE_AJUDA</option>
+                        <option value="SEM_RESPOSTA">SEM_RESPOSTA</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="responderCheckin()">PUT Responder Check-in</button>
+
+            <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;" />
+            <label>ID da UBS (Fila de Prioridade)</label>
+            <input id="idUbsFila" type="number" value="1" />
+            <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/pendentes')">GET Pendentes UBS</button>
+            <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/visitas')">GET Visitas UBS</button>
+        </div>
+    </div>
+
+    <div class="console">
+        <div class="console-header">
+            <strong>Resposta da API: <span id="endpointLabel">Aguardando requisição...</span></strong>
+            <span id="httpStatus"></span>
+        </div>
+        <pre id="output">Clique em qualquer ação acima para interagir com os endpoints REST no banco Oracle.</pre>
+    </div>
+</div>
+
+<script>
+    const val = (id) => document.getElementById(id).value;
+
+    async function req(method, path, body = null) {
+        document.getElementById('endpointLabel').textContent = `${method} ${path}`;
+        const statusEl = document.getElementById('httpStatus');
+        const outEl = document.getElementById('output');
+        statusEl.textContent = 'Enviando...';
+        statusEl.className = '';
+
+        try {
+            const opts = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch(path, opts);
+            const text = await res.text();
+            let formatted = text;
+            try { formatted = JSON.stringify(JSON.parse(text), null, 2); } catch {}
+            statusEl.textContent = `HTTP ${res.status}`;
+            statusEl.className = res.ok ? 'status-ok' : 'status-err';
+            outEl.textContent = formatted || '(Sem conteúdo)';
+        } catch (err) {
+            statusEl.textContent = 'Erro de rede';
+            statusEl.className = 'status-err';
+            outEl.textContent = err.message;
+        }
+    }
+
+    function cadastrarIdoso() {
+        req('POST', '/api/idosos', {
+            nome: val('nomeIdoso'),
+            telefone: val('telIdoso'),
+            ruaNumero: val('ruaIdoso'),
+            cidade: val('cidadeIdoso'),
+            bairro: val('bairroIdoso'),
+            horarioCheckinManha: val('manhaIdoso'),
+            horarioCheckinTarde: val('tardeIdoso'),
+            consentimento: val('consentIdoso') === 'true',
+            semFamilia: val('semFamIdoso') === 'true',
+            idUbs: Number(val('ubsIdoso'))
+        });
+    }
+
+    function criarAlerta() {
+        req('POST', '/api/alertas-calor', {
+            cidade: val('cidadeAlerta'),
+            dataAlerta: val('dataAlerta'),
+            orientacoes: val('orientAlerta'),
+            ativo: true
+        });
+    }
+
+    function agendarCheckin() {
+        req('POST', '/api/checkins', {
+            idIdoso: Number(val('idIdosoCheckin'))
+        });
+    }
+
+    function responderCheckin() {
+        req('PUT', `/api/checkins/${val('idCheckinResp')}/responder`, {
+            resposta: val('respCheckin'),
+            localizacao: val('respCheckin') === 'PRECISO_DE_AJUDA' ? 'Localização pontual acionada' : null
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => req('GET', '/api/idosos'));
+</script>
+</body>
+</html>
