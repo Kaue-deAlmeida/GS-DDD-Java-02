@@ -18,6 +18,13 @@ API RESTful desenvolvida em **Java 21** e **Spring Boot** conectada ao banco de 
 
 ---
 
+## Links Oficiais do Projeto
+* **Deploy (Render):** https://gs-ddd-java-02.onrender.com
+* **Repositório (GitHub):** https://github.com/Kaue-deAlmeida/GS-DDD-Java-02
+
+---
+
+
 ## Sobre a Solução
 
 O **OndaCare** atua de forma proativa nos dias de alerta de onda de calor (INMET) na cidade cadastrada do idoso:
