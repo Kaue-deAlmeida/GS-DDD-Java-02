@@ -111,11 +111,3 @@ ondacare/
 | **UBS** | `GET` | `/api/ubs/{ubsId}/pendentes` | Lista pendentes da UBS ordenados por prioridade |
 | **UBS** | `POST` | `/api/ubs/{ubsId}/visitas` | Registra visita (`ESTA_BEM` ou `PRECISOU_DE_ATENDIMENTO`) |
 | **UBS** | `GET` | `/api/ubs/{ubsId}/visitas` | Lista visitas registradas pela UBS |
-
----
-
-## Deploy (Render.com)
-
-1. Conecte este repositório no **Render.com** como **Web Service** utilizando o runtime **Docker** (via `Dockerfile` na raiz).
-2. Configure as variáveis de ambiente `ORACLE_URL`, `ORACLE_USER` e `ORACLE_PASSWORD`.
-3. Acesse a URL pública gerada em `.onrender.com` (ex.: `GET /api/idosos`).
