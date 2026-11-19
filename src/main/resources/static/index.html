@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OndaCare — Painel Operacional e API</title>
+    <title>OndaCare — Painel Operacional</title>
     <style>
         :root {
             --bg: #0f172a;
@@ -15,24 +15,29 @@
             --primary-hover: #ea580c;
             --ok: #22c55e;
             --danger: #ef4444;
+            --danger-hover: #dc2626;
         }
         * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
         body { margin: 0; background: var(--bg); color: var(--text); padding: 24px; }
-        .container { max-width: 1120px; margin: 0 auto; }
+        .container { max-width: 1140px; margin: 0 auto; }
         header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
         h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
         .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
         .badge { background: rgba(34,197,94,0.15); color: var(--ok); border: 1px solid rgba(34,197,94,0.4); padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 18px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; }
         .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
         .card h2 { margin: 0 0 12px; font-size: 1.05rem; color: #fdba74; }
         label { display: block; font-size: 0.8rem; color: var(--muted); margin: 8px 0 4px; }
         input, select { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: #0f172a; color: var(--text); font-size: 0.9rem; }
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        button { margin-top: 12px; padding: 9px 14px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.88rem; }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        button { padding: 9px 13px; border: none; border-radius: 8px; background: var(--primary); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.86rem; }
         button:hover { background: var(--primary-hover); }
         button.secondary { background: #334155; }
         button.secondary:hover { background: #475569; }
+        button.danger { background: var(--danger); }
+        button.danger:hover { background: var(--danger-hover); }
+        hr { border: 0; border-top: 1px solid var(--border); margin: 16px 0; }
         .console { margin-top: 22px; background: #020617; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
         .console-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 0.84rem; color: #e2e8f0; max-height: 320px; overflow-y: auto; }
@@ -45,29 +50,29 @@
     <header>
         <div>
             <h1>OndaCare — Monitoramento Preventivo em Ondas de Calor</h1>
-            <div class="subtitle">Equipe CitizenTech · FIAP Global Solution 2026.2 · API RESTful Java + Spring Boot + Oracle</div>
+            <div class="subtitle">Equipe CitizenTech · FIAP Global Solution 2026.2 · Cuidado integrado entre Idoso, Família e UBS</div>
         </div>
-        <div class="badge" id="apiStatus">API Online</div>
+        <div class="badge" id="apiStatus">Sistema Online</div>
     </header>
 
     <div class="grid">
-        <!-- Card 1: Cadastrar e Listar Idosos -->
+        <!-- Card 1: Idosos -->
         <div class="card">
-            <h2>1. Cadastro e Consulta de Idosos</h2>
-            <label>Nome do Idoso</label>
-            <input id="nomeIdoso" value="Aparecida Lopes" />
+            <h2>1. Idosos Cadastrados</h2>
+            <label>Nome Completo</label>
+            <input id="nomeIdoso" placeholder="Ex.: Aparecida Lopes" />
             <div class="row">
                 <div>
                     <label>Telefone</label>
-                    <input id="telIdoso" value="(11) 98472-3105" />
+                    <input id="telIdoso" placeholder="Ex.: (11) 98472-3105" />
                 </div>
                 <div>
-                    <label>ID UBS Referência</label>
+                    <label>ID da UBS de Referência</label>
                     <input id="ubsIdoso" type="number" value="1" />
                 </div>
             </div>
             <label>Endereço (Rua e Número)</label>
-            <input id="ruaIdoso" value="Rua das Palmeiras, 248" />
+            <input id="ruaIdoso" placeholder="Ex.: Rua das Palmeiras, 248" />
             <div class="row">
                 <div>
                     <label>Cidade</label>
@@ -75,16 +80,16 @@
                 </div>
                 <div>
                     <label>Bairro</label>
-                    <input id="bairroIdoso" value="Jardim Silveira" />
+                    <input id="bairroIdoso" placeholder="Ex.: Jardim Silveira" />
                 </div>
             </div>
             <div class="row">
                 <div>
-                    <label>Check-in Manhã</label>
+                    <label>Horário Manhã</label>
                     <input id="manhaIdoso" value="08:00" />
                 </div>
                 <div>
-                    <label>Check-in Tarde</label>
+                    <label>Horário Tarde</label>
                     <input id="tardeIdoso" value="16:30" />
                 </div>
             </div>
@@ -92,20 +97,29 @@
                 <div>
                     <label>Consentimento LGPD</label>
                     <select id="consentIdoso">
-                        <option value="true" selected>Sim (true)</option>
-                        <option value="false">Não (false)</option>
+                        <option value="true" selected>Autorizado</option>
+                        <option value="false">Não autorizado</option>
                     </select>
                 </div>
                 <div>
-                    <label>Sem Família</label>
+                    <label>Possui Rede Familiar?</label>
                     <select id="semFamIdoso">
-                        <option value="false" selected>Não</option>
-                        <option value="true">Sim</option>
+                        <option value="false" selected>Sim, possui família</option>
+                        <option value="true">Não possui família</option>
                     </select>
                 </div>
             </div>
-            <button onclick="cadastrarIdoso()">POST /api/idosos</button>
-            <button class="secondary" onclick="req('GET', '/api/idosos')">GET /api/idosos</button>
+            <div class="actions">
+                <button onclick="registrarIdoso()">Registrar Idoso</button>
+                <button class="secondary" onclick="req('GET', '/api/idosos')">Listar Idosos</button>
+            </div>
+
+            <hr />
+            <label>ID do Idoso para Excluir</label>
+            <div class="row">
+                <input id="idIdosoExcluir" type="number" placeholder="ID" />
+                <button class="danger" style="margin-top:0" onclick="excluirRegistro('/api/idosos/' + val('idIdosoExcluir'), 'idoso')">Excluir Idoso</button>
+            </div>
         </div>
 
         <!-- Card 2: Alertas de Calor & Ponto Fresco -->
@@ -115,66 +129,97 @@
             <input id="cidadeAlerta" value="Barueri" />
             <label>Data do Alerta</label>
             <input id="dataAlerta" type="date" value="2026-11-20" />
-            <label>Orientações Preventivas</label>
-            <input id="orientAlerta" value="Beba água; Deixe a casa ventilada; Evite sair nas horas mais quentes." />
-            <button onclick="criarAlerta()">POST /api/alertas-calor</button>
-            <button class="secondary" onclick="req('GET', '/api/alertas-calor?cidade=' + encodeURIComponent(val('cidadeAlerta')))">GET Alertas</button>
+            <label>Orientações Preventivas (opcional — usa padrão se vazio)</label>
+            <input id="orientAlerta" placeholder="Ex.: Beba água e evite sair nos horários mais quentes" />
+            <div class="actions">
+                <button onclick="publicarAlerta()">Publicar Alerta</button>
+                <button class="secondary" onclick="req('GET', '/api/alertas-calor?cidade=' + encodeURIComponent(val('cidadeAlerta')))">Ver Alertas Ativos</button>
+            </div>
 
-            <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;" />
-            <label>ID do Idoso para Consultar Ponto Fresco</label>
-            <input id="idIdosoPonto" type="number" value="1" />
-            <button class="secondary" onclick="req('GET', '/api/idosos/' + val('idIdosoPonto') + '/ponto-fresco')">GET Ponto Fresco</button>
+            <div class="row" style="margin-top:8px;">
+                <div>
+                    <label>ID do Alerta para Excluir</label>
+                    <input id="idAlertaExcluir" type="number" placeholder="ID" />
+                </div>
+                <div style="display:flex; align-items:flex-end;">
+                    <button class="danger" style="width:100%" onclick="excluirRegistro('/api/alertas-calor/' + val('idAlertaExcluir'), 'alerta')">Excluir Alerta</button>
+                </div>
+            </div>
+
+            <hr />
+            <label>ID do Idoso (Consultar Ponto Fresco / UBS)</label>
+            <div class="row">
+                <input id="idIdosoPonto" type="number" value="1" />
+                <button class="secondary" style="margin-top:0" onclick="req('GET', '/api/idosos/' + val('idIdosoPonto') + '/ponto-fresco')">Ver Ponto Fresco</button>
+            </div>
         </div>
 
         <!-- Card 3: Check-in, Escalação e Fila UBS -->
         <div class="card">
-            <h2>3. Check-in, Escalação e UBS</h2>
-            <label>ID do Idoso (Agendar Check-in)</label>
+            <h2>3. Check-in Diário e Atendimento UBS</h2>
+            <label>ID do Idoso</label>
             <input id="idIdosoCheckin" type="number" value="1" />
-            <button onclick="agendarCheckin()">POST /api/checkins</button>
-            <button class="secondary" onclick="req('GET', '/api/idosos/' + val('idIdosoCheckin') + '/checkins/hoje')">GET Check-ins</button>
+            <div class="actions">
+                <button onclick="agendarCheckin()">Agendar Check-in</button>
+                <button class="secondary" onclick="req('GET', '/api/idosos/' + val('idIdosoCheckin') + '/checkins/hoje')">Histórico de Check-ins</button>
+            </div>
 
             <div class="row" style="margin-top:8px;">
                 <div>
-                    <label>ID Check-in</label>
-                    <input id="idCheckinResp" type="number" value="1" />
+                    <label>ID do Check-in</label>
+                    <input id="idCheckinResp" type="number" placeholder="ID" />
                 </div>
                 <div>
-                    <label>Resposta</label>
+                    <label>Resposta do Idoso</label>
                     <select id="respCheckin">
-                        <option value="TO_BEM">TO_BEM</option>
-                        <option value="PRECISO_DE_AJUDA">PRECISO_DE_AJUDA</option>
-                        <option value="SEM_RESPOSTA">SEM_RESPOSTA</option>
+                        <option value="TO_BEM">Estou bem</option>
+                        <option value="PRECISO_DE_AJUDA">Preciso de ajuda</option>
+                        <option value="SEM_RESPOSTA">Sem resposta (escalar)</option>
                     </select>
                 </div>
             </div>
-            <button onclick="responderCheckin()">PUT Responder Check-in</button>
+            <div class="actions">
+                <button onclick="responderCheckin()">Enviar Resposta</button>
+                <button class="danger" onclick="excluirRegistro('/api/checkins/' + val('idCheckinResp'), 'check-in')">Excluir Check-in</button>
+            </div>
 
-            <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;" />
-            <label>ID da UBS (Fila de Prioridade)</label>
+            <hr />
+            <label>ID da UBS (Monitoramento)</label>
             <input id="idUbsFila" type="number" value="1" />
-            <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/pendentes')">GET Pendentes UBS</button>
-            <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/visitas')">GET Visitas UBS</button>
+            <div class="actions">
+                <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/pendentes')">Fila de Prioridade UBS</button>
+                <button class="secondary" onclick="req('GET', '/api/ubs/' + val('idUbsFila') + '/visitas')">Histórico de Visitas</button>
+            </div>
         </div>
     </div>
 
     <div class="console">
         <div class="console-header">
-            <strong>Resposta da API: <span id="endpointLabel">Aguardando requisição...</span></strong>
+            <strong>Retorno da Operação: <span id="endpointLabel">Aguardando ação...</span></strong>
             <span id="httpStatus"></span>
         </div>
-        <pre id="output">Clique em qualquer ação acima para interagir com os endpoints REST no banco Oracle.</pre>
+        <pre id="output">Use os botões acima para operar o sistema conectado ao banco Oracle.</pre>
     </div>
 </div>
 
 <script>
-    const val = (id) => document.getElementById(id).value;
+    const val = (id) => document.getElementById(id).value.trim();
+    const norm = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    const onlyDigits = (s) => s.replace(/\D/g, '');
+
+    function mostrarMensagem(titulo, texto, ok = false) {
+        document.getElementById('endpointLabel').textContent = titulo;
+        const statusEl = document.getElementById('httpStatus');
+        statusEl.textContent = ok ? 'Concluído' : 'Atenção';
+        statusEl.className = ok ? 'status-ok' : 'status-err';
+        document.getElementById('output').textContent = texto;
+    }
 
     async function req(method, path, body = null) {
         document.getElementById('endpointLabel').textContent = `${method} ${path}`;
         const statusEl = document.getElementById('httpStatus');
         const outEl = document.getElementById('output');
-        statusEl.textContent = 'Enviando...';
+        statusEl.textContent = 'Processando...';
         statusEl.className = '';
 
         try {
@@ -186,21 +231,53 @@
             try { formatted = JSON.stringify(JSON.parse(text), null, 2); } catch {}
             statusEl.textContent = `HTTP ${res.status}`;
             statusEl.className = res.ok ? 'status-ok' : 'status-err';
-            outEl.textContent = formatted || '(Sem conteúdo)';
+            outEl.textContent = formatted || 'Operação concluída com sucesso.';
+            return res;
         } catch (err) {
-            statusEl.textContent = 'Erro de rede';
+            statusEl.textContent = 'Erro de conexão';
             statusEl.className = 'status-err';
             outEl.textContent = err.message;
+            return null;
         }
     }
 
-    function cadastrarIdoso() {
-        req('POST', '/api/idosos', {
-            nome: val('nomeIdoso'),
-            telefone: val('telIdoso'),
-            ruaNumero: val('ruaIdoso'),
+    async function registrarIdoso() {
+        const nome = val('nomeIdoso');
+        const telefone = val('telIdoso');
+        const ruaNumero = val('ruaIdoso');
+        const bairro = val('bairroIdoso');
+
+        if (!nome || !telefone || !ruaNumero || !bairro) {
+            mostrarMensagem('Validação de Cadastro', 'Preencha nome, telefone, endereço e bairro antes de registrar o idoso.');
+            return;
+        }
+
+        // Verifica duplicidade por nome ou telefone antes de enviar
+        try {
+            const checkRes = await fetch('/api/idosos');
+            if (checkRes.ok) {
+                const existentes = await checkRes.json();
+                const telDigits = onlyDigits(telefone);
+                const duplicado = existentes.find(i =>
+                    norm(i.nome || '') === norm(nome) ||
+                    (telDigits && onlyDigits(i.telefone || '') === telDigits)
+                );
+                if (duplicado) {
+                    mostrarMensagem(
+                        'Cadastro Duplicado Bloqueado',
+                        `Já existe um idoso cadastrado com este nome ou telefone (ID ${duplicado.idIdoso} — ${duplicado.nome}).`
+                    );
+                    return;
+                }
+            }
+        } catch {}
+
+        await req('POST', '/api/idosos', {
+            nome,
+            telefone,
+            ruaNumero,
             cidade: val('cidadeIdoso'),
-            bairro: val('bairroIdoso'),
+            bairro,
             horarioCheckinManha: val('manhaIdoso'),
             horarioCheckinTarde: val('tardeIdoso'),
             consentimento: val('consentIdoso') === 'true',
@@ -209,26 +286,44 @@
         });
     }
 
-    function criarAlerta() {
+    function publicarAlerta() {
+        const orientacoes = val('orientAlerta');
         req('POST', '/api/alertas-calor', {
             cidade: val('cidadeAlerta'),
             dataAlerta: val('dataAlerta'),
-            orientacoes: val('orientAlerta'),
+            orientacoes: orientacoes || null,
             ativo: true
         });
     }
 
     function agendarCheckin() {
-        req('POST', '/api/checkins', {
-            idIdoso: Number(val('idIdosoCheckin'))
-        });
+        const idIdoso = val('idIdosoCheckin');
+        if (!idIdoso) {
+            mostrarMensagem('Validação', 'Informe o ID do idoso para agendar o check-in.');
+            return;
+        }
+        req('POST', '/api/checkins', { idIdoso: Number(idIdoso) });
     }
 
     function responderCheckin() {
-        req('PUT', `/api/checkins/${val('idCheckinResp')}/responder`, {
+        const id = val('idCheckinResp');
+        if (!id) {
+            mostrarMensagem('Validação', 'Informe o ID do check-in que deseja responder.');
+            return;
+        }
+        req('PUT', `/api/checkins/${id}/responder`, {
             resposta: val('respCheckin'),
             localizacao: val('respCheckin') === 'PRECISO_DE_AJUDA' ? 'Localização pontual acionada' : null
         });
+    }
+
+    function excluirRegistro(path, tipo) {
+        if (path.endsWith('/')) {
+            mostrarMensagem('Validação de Exclusão', `Informe o ID do ${tipo} antes de excluir.`);
+            return;
+        }
+        if (!confirm(`Tem certeza que deseja excluir este ${tipo}?`)) return;
+        req('DELETE', path);
     }
 
     window.addEventListener('DOMContentLoaded', () => req('GET', '/api/idosos'));
